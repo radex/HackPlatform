@@ -90,4 +90,42 @@ number 10
 symbol ]
 symbol ;
 
+keyword let
+identifier foo
+symbol =
+identifier method
+symbol (
+symbol )
+symbol +
+identifier class
+symbol .
+identifier method
+symbol (
+symbol )
+symbol ;
+
+keyword let
+identifier foo
+symbol =
+identifier method
+symbol (
+number 5
+symbol )
+symbol +
+identifier var
+symbol .
+identifier method
+symbol (
+number 5
+symbol ,
+string foo bar
+symbol ,
+symbol (
+number 3
+symbol +
+number 2
+symbol )
+symbol )
+symbol ;
+
 symbol }

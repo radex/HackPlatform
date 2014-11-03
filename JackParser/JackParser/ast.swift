@@ -56,16 +56,16 @@ enum Term {
     case KeywordConstant(JackParser.KeywordConstant)
     case VariableName(String)
     case VariableSubscript(String, Box<Expression>)
-    //    case SubroutineCall(JackParser.SubroutineCall)
+    case SubroutineCall(JackParser.SubroutineCall)
     case BoxedExpression(Box<Expression>)
     case UnaryOpTerm(UnaryOperator, Box<Term>)
 }
 
-//struct SubroutineCall {
-//    let classOrVar: String?
-//    let method: String
-//    let arguments: [Expression]
-//}
+struct SubroutineCall {
+    let classOrVar: String?
+    let name: String
+    let arguments: [Expression]
+}
 
 enum KeywordConstant: String {
     case True = "TRUE"
@@ -101,6 +101,7 @@ extension Term: Printable {
         case .KeywordConstant(let kwd): return kwd.rawValue
         case .VariableName(let id): return id
         case .VariableSubscript(let id, let sub): return "\(id)[\(sub)]"
+        case .SubroutineCall(let call): return "\(call)"
         case .BoxedExpression(let expr): return "(\(expr))"
         case .UnaryOpTerm(let op, let box): return "\(op)\(box.value)"
         }
@@ -141,6 +142,20 @@ extension Statement: Printable {
             let expression = expr?.description ?? ""
             return "RETURN \(expression);\n"
         }
+    }
+}
+
+extension SubroutineCall: Printable {
+    var description: String {
+        var str = ""
+        if let classOrVar = classOrVar {
+            str += "\(classOrVar)."
+        }
+        str += name
+        str += "("
+        str += join(", ", arguments.map { "\($0)" })
+        str += ")"
+        return str
     }
 }
 

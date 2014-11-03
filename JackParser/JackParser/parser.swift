@@ -140,6 +140,7 @@ func parseTerm(stream: TokenStream) -> (Term, TokenStream)? {
     }
     
     return parseSimpleConstantTerm(stream) ??
+        parseSubroutineCallTerm(stream) ??
         parseVariableTerm(stream) ??
         parseBoxedExpression(stream) ??
         parseUnaryOperatorTerm(stream)
@@ -162,6 +163,84 @@ func parseSimpleConstantTerm(stream: TokenStream) -> (Term, TokenStream)? {
     } else {
         return nil
     }
+}
+
+func parseSubroutineCallTerm(stream: TokenStream) -> (Term, TokenStream)? {
+    if let (call, stream) = parseSubroutineCall(stream) {
+        return (.SubroutineCall(call), stream)
+    } else {
+        return nil
+    }
+}
+
+func parseSubroutineCall(stream: TokenStream) -> (SubroutineCall, TokenStream)? {
+    var stream = stream
+    var firstIdent: String
+    var secondIdent: String?
+    var arguments: [Expression] = []
+    
+    // first identifier (name or class/variable name)
+    if let str = stream[0].getIdent() {
+        firstIdent = str
+        stream = stream.advance(1)
+    } else {
+        return nil
+    }
+    
+    // do we have a dot?
+    if stream[0] == .Symbol(".") {
+        if let str = stream[1].getIdent() {
+            secondIdent = str
+            stream = stream.advance(2)
+        } else {
+            fatalError("Invalid method name")
+        }
+    }
+    
+    // opening paren
+    if stream[0] != .Symbol("(") {
+        return nil
+    }
+    
+    stream = stream.advance(1)
+    
+    // do we have arguments?
+    if stream[0] != .Symbol(")") {
+        let (args, newStream) = parseSubroutineCallArguments(stream)
+        arguments = args
+        stream = newStream
+        assert(stream[0] == .Symbol(")"))
+    }
+    
+    // return
+    let classOrVar = (secondIdent != nil) ? firstIdent : Optional<String>.None
+    let name = (secondIdent != nil) ? secondIdent! : firstIdent
+    let call = SubroutineCall(classOrVar: classOrVar, name: name, arguments: arguments)
+    return (call, stream.advance(1))
+}
+
+// assumes more than one argument in the stream
+
+func parseSubroutineCallArguments(stream: TokenStream) -> ([Expression], TokenStream) {
+    var stream = stream
+    var arguments: [Expression] = []
+    
+    while true {
+        let (expr, newStream) = parseExpression(stream)!
+        arguments.append(expr)
+        stream = newStream
+        
+        if stream[0] == .Symbol(")") {
+            break
+        } else if stream[0] == .Symbol(",") {
+            stream = stream.advance(1)
+            continue
+        } else {
+            fatalError("Syntax error in the argument list")
+        }
+    }
+    
+    return (arguments, stream)
 }
 
 func parseVariableTerm(stream: TokenStream) -> (Term, TokenStream)? {
