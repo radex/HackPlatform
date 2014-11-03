@@ -10,6 +10,7 @@ enum Term {
     case StringConstant(String)
     case KeywordConstant(JackParser.KeywordConstant)
     case VariableName(String)
+    case UnaryOpTerm(UnaryOperator, Box<Term>)
 }
 
 enum Operator: String {
@@ -22,6 +23,11 @@ enum Operator: String {
     case Lt = "<"
     case Gt = ">"
     case Eq = "="
+}
+
+enum UnaryOperator: String {
+    case Minus = "-"
+    case Not = "~"
 }
 
 struct Expression {
@@ -44,11 +50,18 @@ extension Term: Printable {
         case .StringConstant(let str): return "\"\(str)\""
         case .KeywordConstant(let kwd): return kwd.rawValue
         case .VariableName(let id): return "Variable '\(id)'"
+        case .UnaryOpTerm(let op, let box): return "\(op)\(box.value)"
         }
     }
 }
 
 extension Operator: Printable {
+    var description: String {
+        return rawValue
+    }
+}
+
+extension UnaryOperator: Printable {
     var description: String {
         return rawValue
     }

@@ -54,6 +54,10 @@ symbol +
 keyword this
 symbol +
 string blah blah blah
+symbol +
+symbol ~
+symbol -
+string 10
 symbol ;
 
 symbol }

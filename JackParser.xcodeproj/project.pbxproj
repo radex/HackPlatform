@@ -13,6 +13,7 @@
 		6EA171C01A06B2E5004DD596 /* ast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA171BF1A06B2E5004DD596 /* ast.swift */; };
 		6EA171C21A06B571004DD596 /* parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA171C11A06B571004DD596 /* parser.swift */; };
 		6EA171C41A06B888004DD596 /* stream.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA171C31A06B888004DD596 /* stream.swift */; };
+		6EA171C61A07BD95004DD596 /* ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EA171C51A07BD95004DD596 /* ext.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -36,6 +37,7 @@
 		6EA171BF1A06B2E5004DD596 /* ast.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ast.swift; sourceTree = "<group>"; };
 		6EA171C11A06B571004DD596 /* parser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = parser.swift; sourceTree = "<group>"; };
 		6EA171C31A06B888004DD596 /* stream.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = stream.swift; sourceTree = "<group>"; };
+		6EA171C51A07BD95004DD596 /* ext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ext.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +76,7 @@
 				6EA171BF1A06B2E5004DD596 /* ast.swift */,
 				6EA171C11A06B571004DD596 /* parser.swift */,
 				6EA171C31A06B888004DD596 /* stream.swift */,
+				6EA171C51A07BD95004DD596 /* ext.swift */,
 			);
 			path = JackParser;
 			sourceTree = "<group>";
@@ -135,6 +138,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6EA171C21A06B571004DD596 /* parser.swift in Sources */,
+				6EA171C61A07BD95004DD596 /* ext.swift in Sources */,
 				6EA171BE1A06ADA0004DD596 /* token_reader.swift in Sources */,
 				6EA171C41A06B888004DD596 /* stream.swift in Sources */,
 				6EA171C01A06B2E5004DD596 /* ast.swift in Sources */,
@@ -253,6 +257,7 @@
 				6EA171BA1A06ACA6004DD596 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

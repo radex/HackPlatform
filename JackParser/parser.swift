@@ -130,8 +130,14 @@ func parseTerm(stream: TokenStream) -> (Term, TokenStream)? {
         }
     case .Identifier(let id):
         return (.VariableName(id), stream.advance(1))
-    default:
-        return nil
+    case .Symbol(let sym):
+        if let op = UnaryOperator(rawValue: sym) {
+            if let (term, stream) = parseTerm(stream.advance(1)) {
+                return (.UnaryOpTerm(op, Box(term)), stream)
+            }
+        }
+        
+        fatalError("")
     }
 }
 
