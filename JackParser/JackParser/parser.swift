@@ -1,4 +1,63 @@
-import Foundation
+func parseVariableDeclarations(stream: TokenStream) -> ([VariableDeclaration], TokenStream) {
+    var declarations: [VariableDeclaration] = []
+    var stream = stream
+    
+    while let (decl, newStream) = parseVariableDeclaration(stream) {
+        declarations.append(decl)
+        stream = newStream
+    }
+    
+    return (declarations, stream)
+}
+
+func parseVariableDeclaration(stream: TokenStream) -> (VariableDeclaration, TokenStream)? {
+    var stream = stream
+    if stream.isEmpty || stream[0] != .Keyword("var") {
+        return nil
+    }
+    
+    var type: Type
+    var names: [String] = []
+    
+    // type
+    if let kwd = stream[1].getKeyword() {
+        switch kwd {
+        case "int": type = .Int
+        case "char": type = .Char
+        case "boolean": type = .Boolean
+        default: fatalError("Expected a valid variable type")
+        }
+    } else if let name = stream[1].getIdent() {
+        type = .Class(name)
+    } else {
+        fatalError("Expected a valid variable type")
+    }
+    
+    stream = stream.advance(2)
+    
+    // names
+    while true {
+        if let name = stream[0].getIdent() {
+            names.append(name)
+        } else {
+            fatalError("Expected a valid variable name")
+        }
+        
+        if stream[1] == .Symbol(",") {
+            stream = stream.advance(2)
+            continue
+        } else if stream[1] == .Symbol(";") {
+            stream = stream.advance(2)
+            break
+        } else {
+            fatalError("Expected another variable name or semicolon")
+        }
+    }
+    
+    // return
+    let declaration = VariableDeclaration(type: type, names: names)
+    return (declaration, stream)
+}
 
 func parseStatements(stream: TokenStream) -> ([Statement], TokenStream) {
     var statements: [Statement] = []

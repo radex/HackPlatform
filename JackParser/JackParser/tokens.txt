@@ -1,3 +1,17 @@
+keyword var
+identifier String
+identifier varName
+symbol ,
+identifier var2
+symbol ,
+identifier var3
+symbol ;
+
+keyword var
+keyword int
+identifier varName
+symbol ;
+
 keyword while
 
 symbol (

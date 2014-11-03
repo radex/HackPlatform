@@ -29,15 +29,15 @@ import Foundation
 //    let statements: [Statement]
 //}
 //
-//struct VariableDeclaration {
-//    let type: Type
-//    let names: [String]
-//}
-//
-//enum Type {
-//    case Int, Char, Boolean
-//    case Class(String)
-//}
+struct VariableDeclaration {
+    let type: Type
+    let names: [String]
+}
+
+enum Type {
+    case Int, Char, Boolean
+    case Class(String)
+}
 
 enum Statement {
     case Let(variable: String, subskript: Expression?, expression: Expression)

@@ -1,5 +1,23 @@
 import Foundation
 
+extension VariableDeclaration: Printable {
+    var description: String {
+        let names = join(", ", self.names)
+        return "var \(type) \(names);"
+    }
+}
+
+extension Type: Printable {
+    var description: String {
+        switch self {
+        case .Int: return "int"
+        case .Boolean: return "boolean"
+        case .Char: return "char"
+        case .Class(let name): return name
+        }
+    }
+}
+
 func formatStatements(statements: [Statement], indent: Bool = false) -> String {
     let string = join("\n", statements.map { "\($0)" })
     if indent {
