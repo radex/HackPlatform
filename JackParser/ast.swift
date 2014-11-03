@@ -15,6 +15,7 @@ struct Expression {
 
 enum Statement {
     case While(condition: Expression, statements: [Statement])
+    case If(condition: Expression, ifStatements: [Statement], elseStatements: [Statement]?)
     case Let(variable: String, expression: Expression)
 }
 
@@ -39,7 +40,13 @@ extension Statement: Printable {
     var description: String {
         switch self {
         case .While(let condition, let statements):
-            return "WHILE (\(condition)) {\n \(statements) }"
+            return "WHILE (\(condition)) {\n \(statements) }\n"
+        case .If(let condition, let ifStatements, let elseStatements):
+            var str = "IF (\(condition)) {\n \(ifStatements) }"
+            if let elseStatements = elseStatements {
+                str += " ELSE {\n \(elseStatements) }"
+            }
+            return str + "\n"
         case .Let(let variable, let expression):
             return "LET \(variable) = \(expression);\n"
         }

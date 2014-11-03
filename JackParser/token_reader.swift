@@ -34,7 +34,7 @@ func ==(a: Token, b: Token) -> Bool {
 }
 
 func readTokens(tokens: NSString) -> [Token] {
-    return tokens.componentsSeparatedByString("\n").map { readToken($0 as String) }
+    return tokens.componentsSeparatedByString("\n").filter { $0.length > 0 }.map { readToken($0 as String) }
 }
 
 private func readToken(token: String) -> Token {
