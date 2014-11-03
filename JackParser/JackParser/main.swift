@@ -4,7 +4,7 @@ let tokensFile = NSString(contentsOfFile: "tokens.txt", encoding: NSUTF8StringEn
 let tokens = readTokens(tokensFile)
 let stream = TokenStream(tokens)
 
-let (statements, remainingStream) = parseVariableDeclarations(stream)
-//println(formatStatements(statements))
-println(statements)
+let (varDecls, statements, remainingStream) = parseSubroutineBody(stream)
+println(formatList(varDecls))
+println(formatList(statements))
 println("Remaining tokens: \(remainingStream)")

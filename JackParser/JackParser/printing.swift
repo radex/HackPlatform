@@ -1,5 +1,14 @@
 import Foundation
 
+func indent(string: String) -> String {
+    let lines = (string as NSString).componentsSeparatedByString("\n") as [String]
+    return join("\n", lines.map { "    \($0)" })
+}
+
+func formatList<T>(array: [T]) -> String {
+    return join("\n", array.map { "\($0)" })
+}
+
 extension VariableDeclaration: Printable {
     var description: String {
         let names = join(", ", self.names)
@@ -18,32 +27,22 @@ extension Type: Printable {
     }
 }
 
-func formatStatements(statements: [Statement], indent: Bool = false) -> String {
-    let string = join("\n", statements.map { "\($0)" })
-    if indent {
-        let lines = (string as NSString).componentsSeparatedByString("\n") as [String]
-        return join("\n", lines.map { "    \($0)" })
-    } else {
-        return string
-    }
-}
-
 extension Statement: Printable {
     var description: String {
         switch self {
         case .While(let condition, let statements):
             var str = "while (\(condition)) {\n"
-            str += formatStatements(statements, indent: true)
+            str += indent(formatList(statements))
             str += "\n}\n"
             return str
             
         case .If(let condition, let ifStatements, let elseStatements):
             var str = "if (\(condition)) {\n"
-            str += formatStatements(ifStatements, indent: true)
+            str += indent(formatList(ifStatements))
             str += "\n}"
             if let elseStatements = elseStatements {
                 str += " else {\n"
-                str += formatStatements(elseStatements, indent: true)
+                str += indent(formatList(elseStatements))
                 str += "\n}"
             }
             return str + "\n"

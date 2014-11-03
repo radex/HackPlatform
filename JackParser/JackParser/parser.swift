@@ -1,3 +1,15 @@
+func parseSubroutineBody(stream: TokenStream) -> ([VariableDeclaration], [Statement], TokenStream) {
+    var stream = stream
+    
+    let (varDecls, newStream) = parseVariableDeclarations(stream)
+    stream = newStream
+    
+    let (statements, newStream2) = parseStatements(stream)
+    stream = newStream2
+    
+    return (varDecls, statements, stream)
+}
+
 func parseVariableDeclarations(stream: TokenStream) -> ([VariableDeclaration], TokenStream) {
     var declarations: [VariableDeclaration] = []
     var stream = stream
