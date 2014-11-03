@@ -39,6 +39,7 @@ enum Statement {
     case While(condition: Expression, statements: [Statement])
     case If(condition: Expression, ifStatements: [Statement], elseStatements: [Statement]?)
     case Let(variable: String, expression: Expression)
+    case Return(Expression?)
 }
 
 // MARK: Printable
@@ -80,6 +81,9 @@ extension Statement: Printable {
             return str + "\n"
         case .Let(let variable, let expression):
             return "LET \(variable) = \(expression);\n"
+        case .Return(let expr):
+            let expression = expr?.description ?? ""
+            return "RETURN \(expression);\n"
         }
     }
 }

@@ -60,4 +60,14 @@ symbol -
 string 10
 symbol ;
 
+keyword return
+symbol ;
+
+keyword return
+number 10
+symbol -
+number 5
+
+symbol ;
+
 symbol }

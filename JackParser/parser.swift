@@ -11,7 +11,10 @@ func parseStatements(stream: TokenStream) -> ([Statement], TokenStream) {
 }
 
 func parseStatement(stream: TokenStream) -> (Statement, TokenStream)? {
-    return parseWhileStatement(stream) ?? parseIfStatement(stream) ?? parseLetStatement(stream)
+    return parseWhileStatement(stream) ??
+        parseIfStatement(stream) ??
+        parseLetStatement(stream) ??
+        parseReturnStatement(stream)
 }
 
 func parseWhileStatement(stream: TokenStream) -> (Statement, TokenStream)? {
@@ -83,6 +86,24 @@ func parseLetStatement(stream: TokenStream) -> (Statement, TokenStream)? {
     return (statement, stream.advance(1))
 }
 
+func parseReturnStatement(stream: TokenStream) -> (Statement, TokenStream)? {
+    if stream.isEmpty || stream[0] != .Keyword("return") {
+        return nil
+    }
+    
+    var expression: Expression?
+    var workingStream = stream.advance(1)
+    
+    if let (expr, stream) = parseExpression(workingStream) {
+        expression = expr
+        workingStream = stream
+    }
+    
+    assert(workingStream[0] == .Symbol(";"))
+    
+    return (.Return(expression), workingStream.advance(1))
+}
+
 func parseExpression(stream: TokenStream) -> (Expression, TokenStream)? {
     if let (firstTerm, stream) = parseTerm(stream) {
         let (extraTerms, stream) = parseOpTerms(stream)
@@ -134,10 +155,12 @@ func parseTerm(stream: TokenStream) -> (Term, TokenStream)? {
         if let op = UnaryOperator(rawValue: sym) {
             if let (term, stream) = parseTerm(stream.advance(1)) {
                 return (.UnaryOpTerm(op, Box(term)), stream)
+            } else {
+                fatalError("")
             }
+        } else {
+            return nil
         }
-        
-        fatalError("")
     }
 }
 
