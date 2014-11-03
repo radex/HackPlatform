@@ -70,10 +70,10 @@ struct SubroutineCall {
 }
 
 enum KeywordConstant: String {
-    case True = "TRUE"
-    case False = "FALSE"
-    case Null = "NULL"
-    case This = "THIS"
+    case True = "true"
+    case False = "false"
+    case Null = "null"
+    case This = "this"
 }
 
 enum Operator: String {
@@ -91,107 +91,4 @@ enum Operator: String {
 enum UnaryOperator: String {
     case Minus = "-"
     case Not = "~"
-}
-
-// MARK: Printable
-
-func formatStatements(statements: [Statement], indent: Bool = false) -> String {
-    let string = join("\n", statements.map { "\($0)" })
-    if indent {
-        let lines = (string as NSString).componentsSeparatedByString("\n") as [String]
-        return join("\n", lines.map { "    \($0)" })
-    } else {
-        return string
-    }
-}
-
-extension Term: Printable {
-    var description: String {
-        switch self {
-        case .IntegerConstant(let num): return "\(num)"
-        case .StringConstant(let str): return "\"\(str)\""
-        case .KeywordConstant(let kwd): return kwd.rawValue
-        case .VariableName(let id): return id
-        case .VariableSubscript(let id, let sub): return "\(id)[\(sub)]"
-        case .SubroutineCall(let call): return "\(call)"
-        case .BoxedExpression(let expr): return "(\(expr))"
-        case .UnaryOpTerm(let op, let box): return "\(op)\(box.value)"
-        }
-    }
-}
-
-extension Operator: Printable {
-    var description: String {
-        return rawValue
-    }
-}
-
-extension UnaryOperator: Printable {
-    var description: String {
-        return rawValue
-    }
-}
-
-extension Statement: Printable {
-    var description: String {
-        switch self {
-        case .While(let condition, let statements):
-            var str = "while (\(condition)) {\n"
-            str += formatStatements(statements, indent: true)
-            str += "\n}\n"
-            return str
-            
-        case .If(let condition, let ifStatements, let elseStatements):
-            var str = "if (\(condition)) {\n"
-            str += formatStatements(ifStatements, indent: true)
-            str += "\n}"
-            if let elseStatements = elseStatements {
-                str += " else {\n"
-                str += formatStatements(elseStatements, indent: true)
-                str += "\n}"
-            }
-            return str + "\n"
-            
-        case .Let(let variable, let subskript, let expression):
-            var str = "let \(variable)"
-            if let sub = subskript {
-                str += "[\(sub)]"
-            }
-            str += " = \(expression);"
-            return str
-            
-        case .Return(let expr):
-            var str = "return"
-            if let expr = expr {
-                str += " \(expr)"
-            }
-            return "\(str);"
-            
-        case .Do(let call):
-            return "do \(call);"
-        }
-    }
-}
-
-extension SubroutineCall: Printable {
-    var description: String {
-        var str = ""
-        if let classOrVar = classOrVar {
-            str += "\(classOrVar)."
-        }
-        str += name
-        str += "("
-        str += join(", ", arguments.map { "\($0)" })
-        str += ")"
-        return str
-    }
-}
-
-extension Expression: Printable {
-    var description: String {
-        var components: [String] = ["\(firstTerm)"]
-        components += extraTerms.map { "\($0) \($1)" }
-        
-        return join(" ", components)
-    }
 }

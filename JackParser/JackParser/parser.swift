@@ -166,7 +166,7 @@ func parseSimpleConstantTerm(stream: TokenStream) -> (Term, TokenStream)? {
     } else if let string = token.getString() {
         return (.StringConstant(string), stream1)
     } else if let kwd = token.getKeyword() {
-        if let keywordConstant = KeywordConstant(rawValue: (kwd as NSString).uppercaseString) {
+        if let keywordConstant = KeywordConstant(rawValue: kwd) {
             return (.KeywordConstant(keywordConstant), stream1)
         } else {
             fatalError("Found a non-constant keyword expecting an expression term")
