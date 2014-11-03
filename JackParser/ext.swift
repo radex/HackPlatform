@@ -5,3 +5,9 @@ class Box<T> {
         self.value = value
     }
 }
+
+extension Box: Printable {
+    var description: String {
+        return "\(value)"
+    }
+}

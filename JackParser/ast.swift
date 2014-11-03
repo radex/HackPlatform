@@ -10,6 +10,7 @@ enum Term {
     case StringConstant(String)
     case KeywordConstant(JackParser.KeywordConstant)
     case VariableName(String)
+    case BoxedExpression(Box<Expression>)
     case UnaryOpTerm(UnaryOperator, Box<Term>)
 }
 
@@ -51,6 +52,7 @@ extension Term: Printable {
         case .StringConstant(let str): return "\"\(str)\""
         case .KeywordConstant(let kwd): return kwd.rawValue
         case .VariableName(let id): return "Variable '\(id)'"
+        case .BoxedExpression(let expr): return "(\(expr))"
         case .UnaryOpTerm(let op, let box): return "\(op)\(box.value)"
         }
     }

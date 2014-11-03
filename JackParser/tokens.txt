@@ -65,8 +65,17 @@ symbol ;
 
 keyword return
 number 10
+symbol +
+symbol (
 symbol -
 number 5
+symbol +
+symbol (
+number 3
+symbol *
+number 10
+symbol )
+symbol )
 
 symbol ;
 

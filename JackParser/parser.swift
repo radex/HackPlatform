@@ -151,6 +151,10 @@ func parseTerm(stream: TokenStream) -> (Term, TokenStream)? {
         }
     case .Identifier(let id):
         return (.VariableName(id), stream.advance(1))
+    case .Symbol(let sym) where sym == "(":
+        let (expr, stream) = parseExpression(stream.advance(1))!
+        assert(stream[0] == .Symbol(")"))
+        return (.BoxedExpression(Box(expr)), stream.advance(1))
     case .Symbol(let sym):
         if let op = UnaryOperator(rawValue: sym) {
             if let (term, stream) = parseTerm(stream.advance(1)) {
