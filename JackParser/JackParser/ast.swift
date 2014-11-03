@@ -161,9 +161,9 @@ extension SubroutineCall: Printable {
 
 extension Expression: Printable {
     var description: String {
-        let first = firstTerm.description
-        let extra = extraTerms.map { (op, term) in op.description + " " + term.description }
+        var components: [String] = ["\(firstTerm)"]
+        components += extraTerms.map { "\($0) \($1)" }
         
-        return first + " " + join(" ", extra)
+        return join(" ", components)
     }
 }
