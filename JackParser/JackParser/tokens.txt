@@ -76,7 +76,18 @@ symbol *
 number 10
 symbol )
 symbol )
+symbol ;
 
+keyword let
+identifier foo
+symbol [
+number 10
+symbol ]
+symbol =
+identifier foo
+symbol [
+number 10
+symbol ]
 symbol ;
 
 symbol }

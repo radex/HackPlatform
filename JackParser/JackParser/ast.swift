@@ -38,7 +38,7 @@
 //}
 
 enum Statement {
-    case Let(variable: String, expression: Expression)
+    case Let(variable: String, subskript: Expression?, expression: Expression)
     case If(condition: Expression, ifStatements: [Statement], elseStatements: [Statement]?)
     case While(condition: Expression, statements: [Statement])
     //    case Do(SubroutineCall)
@@ -55,7 +55,7 @@ enum Term {
     case StringConstant(String)
     case KeywordConstant(JackParser.KeywordConstant)
     case VariableName(String)
-    //    case VariableSubscript(String, Box<Expression>)
+        case VariableSubscript(String, Box<Expression>)
     //    case SubroutineCall(JackParser.SubroutineCall)
     case BoxedExpression(Box<Expression>)
     case UnaryOpTerm(UnaryOperator, Box<Term>)
@@ -99,7 +99,8 @@ extension Term: Printable {
         case .IntegerConstant(let num): return "\(num)"
         case .StringConstant(let str): return "\"\(str)\""
         case .KeywordConstant(let kwd): return kwd.rawValue
-        case .VariableName(let id): return "Variable '\(id)'"
+        case .VariableName(let id): return id
+        case .VariableSubscript(let id, let sub): return "\(id)[\(sub)]"
         case .BoxedExpression(let expr): return "(\(expr))"
         case .UnaryOpTerm(let op, let box): return "\(op)\(box.value)"
         }
@@ -129,8 +130,13 @@ extension Statement: Printable {
                 str += " ELSE {\n \(elseStatements) }"
             }
             return str + "\n"
-        case .Let(let variable, let expression):
-            return "LET \(variable) = \(expression);\n"
+        case .Let(let variable, let subskript, let expression):
+            var str = "LET \(variable)"
+            if let sub = subskript {
+                str += "[\(sub)]"
+            }
+            str += " = \(expression);\n"
+            return str
         case .Return(let expr):
             let expression = expr?.description ?? ""
             return "RETURN \(expression);\n"

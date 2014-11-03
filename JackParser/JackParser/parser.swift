@@ -67,22 +67,23 @@ func parseElseStatements(stream: TokenStream) -> ([Statement]?, TokenStream) {
 
 
 func parseLetStatement(stream: TokenStream) -> (Statement, TokenStream)? {
+    var stream = stream
+    
     if stream.isEmpty || stream[0] != .Keyword("let") {
         return nil
     }
     
-    var variableName: String
+    // extract variable
+    let (variableName, sub, newStream) = parseVariableNameSubscript(stream.advance(1))!
+    stream = newStream
     
-    switch stream[1] {
-    case .Identifier(let varName): variableName = varName
-    default: fatalError("Variable name must follow the let keyword")
-    }
-    
-    assert(stream[2] == .Symbol("="))
-    let (expr, stream) = parseExpression(stream.advance(3))!
+    // extract value
+    assert(stream[0] == .Symbol("="))
+    let (expr, newStream2) = parseExpression(stream.advance(1))!
+    stream = newStream2
     assert(stream[0] == .Symbol(";"))
     
-    let statement = Statement.Let(variable: variableName, expression: expr)
+    let statement = Statement.Let(variable: variableName, subskript: sub, expression: expr)
     return (statement, stream.advance(1))
 }
 
@@ -150,7 +151,12 @@ func parseTerm(stream: TokenStream) -> (Term, TokenStream)? {
             fatalError("")
         }
     case .Identifier(let id):
-        return (.VariableName(id), stream.advance(1))
+        let (varName, sub, newStream) = parseVariableNameSubscript(stream)!
+        if let sub = sub {
+            return (.VariableSubscript(varName, Box(sub)), newStream)
+        } else {
+            return (.VariableName(varName), newStream)
+        }
     case .Symbol(let sym) where sym == "(":
         let (expr, stream) = parseExpression(stream.advance(1))!
         assert(stream[0] == .Symbol(")"))
@@ -166,6 +172,35 @@ func parseTerm(stream: TokenStream) -> (Term, TokenStream)? {
             return nil
         }
     }
+}
+
+func parseVariableNameSubscript(stream: TokenStream) -> (String, Expression?, TokenStream)? {
+    var stream = stream
+    if stream.isEmpty {
+        return nil
+    }
+    
+    // extract variable name
+    var variableName: String
+    
+    switch stream[0] {
+    case .Identifier(let varName): variableName = varName
+    default: return nil
+    }
+    
+    stream = stream.advance(1)
+    
+    // extract subscript
+    var sub: Expression?
+    
+    if stream[0] == .Symbol("[") {
+        let (expr, newStream) = parseExpression(stream.advance(1))!
+        sub = expr
+        assert(newStream[0] == .Symbol("]"))
+        stream = newStream.advance(1)
+    }
+    
+    return (variableName, sub, stream)
 }
 
 func parseOp(stream: TokenStream) -> (Operator, TokenStream)? {
