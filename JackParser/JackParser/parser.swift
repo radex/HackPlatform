@@ -14,7 +14,8 @@ func parseStatement(stream: TokenStream) -> (Statement, TokenStream)? {
     return parseWhileStatement(stream) ??
         parseIfStatement(stream) ??
         parseLetStatement(stream) ??
-        parseReturnStatement(stream)
+        parseReturnStatement(stream) ??
+        parseDoStatement(stream)
 }
 
 func parseWhileStatement(stream: TokenStream) -> (Statement, TokenStream)? {
@@ -103,6 +104,16 @@ func parseReturnStatement(stream: TokenStream) -> (Statement, TokenStream)? {
     assert(workingStream[0] == .Symbol(";"))
     
     return (.Return(expression), workingStream.advance(1))
+}
+
+func parseDoStatement(stream: TokenStream) -> (Statement, TokenStream)? {
+    if stream.isEmpty || stream[0] != .Keyword("do") {
+        return nil
+    }
+    
+    let (call, newStream) = parseSubroutineCall(stream.advance(1))!
+    assert(newStream[0] == .Symbol(";"))
+    return (.Do(call), newStream.advance(1))
 }
 
 func parseExpression(stream: TokenStream) -> (Expression, TokenStream)? {

@@ -128,4 +128,15 @@ symbol )
 symbol )
 symbol ;
 
+keyword do
+identifier var
+symbol .
+identifier method
+symbol (
+number 5
+symbol ,
+string foo bar
+symbol )
+symbol ;
+
 symbol }

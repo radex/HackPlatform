@@ -41,7 +41,7 @@ enum Statement {
     case Let(variable: String, subskript: Expression?, expression: Expression)
     case If(condition: Expression, ifStatements: [Statement], elseStatements: [Statement]?)
     case While(condition: Expression, statements: [Statement])
-    //    case Do(SubroutineCall)
+    case Do(SubroutineCall)
     case Return(Expression?)
 }
 
@@ -141,6 +141,8 @@ extension Statement: Printable {
         case .Return(let expr):
             let expression = expr?.description ?? ""
             return "RETURN \(expression);\n"
+        case .Do(let call):
+            return "DO \(call);\n"
         }
     }
 }
