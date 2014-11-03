@@ -55,7 +55,7 @@ enum Term {
     case StringConstant(String)
     case KeywordConstant(JackParser.KeywordConstant)
     case VariableName(String)
-        case VariableSubscript(String, Box<Expression>)
+    case VariableSubscript(String, Box<Expression>)
     //    case SubroutineCall(JackParser.SubroutineCall)
     case BoxedExpression(Box<Expression>)
     case UnaryOpTerm(UnaryOperator, Box<Term>)

@@ -139,39 +139,67 @@ func parseTerm(stream: TokenStream) -> (Term, TokenStream)? {
         return nil
     }
     
-    switch stream[0] {
-    case .Number(let number):
-        return (.IntegerConstant(number), stream.advance(1))
-    case .String(let str):
-        return (.StringConstant(str), stream.advance(1))
-    case .Keyword(let kwd):
+    return parseSimpleConstantTerm(stream) ??
+        parseVariableTerm(stream) ??
+        parseBoxedExpression(stream) ??
+        parseUnaryOperatorTerm(stream)
+}
+
+func parseSimpleConstantTerm(stream: TokenStream) -> (Term, TokenStream)? {
+    let token = stream[0]
+    let stream1 = stream.advance(1)
+    
+    if let number = token.getNumber() {
+        return (.IntegerConstant(number), stream1)
+    } else if let string = token.getString() {
+        return (.StringConstant(string), stream1)
+    } else if let kwd = token.getKeyword() {
         if let keywordConstant = KeywordConstant(rawValue: (kwd as NSString).uppercaseString) {
-            return (.KeywordConstant(keywordConstant), stream.advance(1))
+            return (.KeywordConstant(keywordConstant), stream1)
         } else {
-            fatalError("")
+            fatalError("Found a non-constant keyword expecting an expression term")
         }
-    case .Identifier(let id):
-        let (varName, sub, newStream) = parseVariableNameSubscript(stream)!
+    } else {
+        return nil
+    }
+}
+
+func parseVariableTerm(stream: TokenStream) -> (Term, TokenStream)? {
+    if let (varName, sub, newStream) = parseVariableNameSubscript(stream) {
         if let sub = sub {
             return (.VariableSubscript(varName, Box(sub)), newStream)
         } else {
             return (.VariableName(varName), newStream)
         }
-    case .Symbol(let sym) where sym == "(":
-        let (expr, stream) = parseExpression(stream.advance(1))!
-        assert(stream[0] == .Symbol(")"))
-        return (.BoxedExpression(Box(expr)), stream.advance(1))
-    case .Symbol(let sym):
-        if let op = UnaryOperator(rawValue: sym) {
-            if let (term, stream) = parseTerm(stream.advance(1)) {
-                return (.UnaryOpTerm(op, Box(term)), stream)
-            } else {
-                fatalError("")
-            }
-        } else {
-            return nil
+    }
+    
+    return nil
+}
+
+func parseBoxedExpression(stream: TokenStream) -> (Term, TokenStream)? {
+    if let sym = stream[0].getSymbol() {
+        if sym == "(" {
+            let (expr, newStream) = parseExpression(stream.advance(1))!
+            assert(newStream[0] == .Symbol(")"))
+            return (.BoxedExpression(Box(expr)), newStream.advance(1))
         }
     }
+    
+    return nil
+}
+
+func parseUnaryOperatorTerm(stream: TokenStream) -> (Term, TokenStream)? {
+    if let sym = stream[0].getSymbol() {
+        if let op = UnaryOperator(rawValue: sym) {
+            if let (term, newStream) = parseTerm(stream.advance(1)) {
+                return (.UnaryOpTerm(op, Box(term)), newStream)
+            } else {
+                fatalError("No valid expression term following an unary operator")
+            }
+        }
+    }
+    
+    return nil
 }
 
 func parseVariableNameSubscript(stream: TokenStream) -> (String, Expression?, TokenStream)? {

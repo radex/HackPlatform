@@ -33,6 +33,45 @@ func ==(a: Token, b: Token) -> Bool {
     }
 }
 
+extension Token {
+    private enum GetterType {
+        case Keyword, Symbol, String, Identifier
+    }
+    
+    func getKeyword() -> Swift.String? {
+        return get(.Keyword)
+    }
+    
+    func getSymbol() -> Swift.String? {
+        return get(.Symbol)
+    }
+    
+    func getNumber() -> Int? {
+        switch self {
+        case .Number(let v): return v
+        default: return nil
+        }
+    }
+    
+    func getString() -> Swift.String? {
+        return get(.String)
+    }
+    
+    func getIdent() -> Swift.String? {
+        return get(.Identifier)
+    }
+    
+    private func get(what: GetterType) -> Swift.String? {
+        switch (what, self) {
+        case (.Keyword, .Keyword(let v)): return v
+        case (.Symbol, .Symbol(let v)): return v
+        case (.String, .String(let v)): return v
+        case (.Identifier, .Identifier(let v)): return v
+        default: return nil
+        }
+    }
+}
+
 func readTokens(tokens: NSString) -> [Token] {
     return tokens.componentsSeparatedByString("\n").filter { $0.length > 0 }.map { readToken($0 as String) }
 }
