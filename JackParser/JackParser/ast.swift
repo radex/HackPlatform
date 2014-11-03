@@ -1,3 +1,5 @@
+import Foundation
+
 //struct Class {
 //    let name: String
 //    let variables: [ClassVariableDeclaration]
@@ -93,6 +95,16 @@ enum UnaryOperator: String {
 
 // MARK: Printable
 
+func formatStatements(statements: [Statement], indent: Bool = false) -> String {
+    let string = join("\n", statements.map { "\($0)" })
+    if indent {
+        let lines = (string as NSString).componentsSeparatedByString("\n") as [String]
+        return join("\n", lines.map { "    \($0)" })
+    } else {
+        return string
+    }
+}
+
 extension Term: Printable {
     var description: String {
         switch self {
@@ -124,25 +136,39 @@ extension Statement: Printable {
     var description: String {
         switch self {
         case .While(let condition, let statements):
-            return "WHILE (\(condition)) {\n \(statements) }\n"
+            var str = "while (\(condition)) {\n"
+            str += formatStatements(statements, indent: true)
+            str += "\n}\n"
+            return str
+            
         case .If(let condition, let ifStatements, let elseStatements):
-            var str = "IF (\(condition)) {\n \(ifStatements) }"
+            var str = "if (\(condition)) {\n"
+            str += formatStatements(ifStatements, indent: true)
+            str += "\n}"
             if let elseStatements = elseStatements {
-                str += " ELSE {\n \(elseStatements) }"
+                str += " else {\n"
+                str += formatStatements(elseStatements, indent: true)
+                str += "\n}"
             }
             return str + "\n"
+            
         case .Let(let variable, let subskript, let expression):
-            var str = "LET \(variable)"
+            var str = "let \(variable)"
             if let sub = subskript {
                 str += "[\(sub)]"
             }
-            str += " = \(expression);\n"
+            str += " = \(expression);"
             return str
+            
         case .Return(let expr):
-            let expression = expr?.description ?? ""
-            return "RETURN \(expression);\n"
+            var str = "return"
+            if let expr = expr {
+                str += " \(expr)"
+            }
+            return "\(str);"
+            
         case .Do(let call):
-            return "DO \(call);\n"
+            return "do \(call);"
         }
     }
 }

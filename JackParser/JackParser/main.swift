@@ -4,4 +4,6 @@ let tokensFile = NSString(contentsOfFile: "tokens.txt", encoding: NSUTF8StringEn
 let tokens = readTokens(tokensFile)
 let stream = TokenStream(tokens)
 
-println(parseStatements(stream))
+let (statements, remainingStream) = parseStatements(stream)
+println(formatStatements(statements))
+println("Remaining tokens: \(remainingStream)")
