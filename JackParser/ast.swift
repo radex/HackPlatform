@@ -7,6 +7,7 @@ enum KeywordConstant: String {
 
 enum Term {
     case IntegerConstant(Int)
+    case StringConstant(String)
     case KeywordConstant(JackParser.KeywordConstant)
     case VariableName(String)
 }
@@ -40,6 +41,7 @@ extension Term: Printable {
     var description: String {
         switch self {
         case .IntegerConstant(let num): return "\(num)"
+        case .StringConstant(let str): return "\"\(str)\""
         case .KeywordConstant(let kwd): return kwd.rawValue
         case .VariableName(let id): return "Variable '\(id)'"
         }

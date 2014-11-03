@@ -120,6 +120,8 @@ func parseTerm(stream: TokenStream) -> (Term, TokenStream)? {
     switch stream[0] {
     case .Number(let number):
         return (.IntegerConstant(number), stream.advance(1))
+    case .String(let str):
+        return (.StringConstant(str), stream.advance(1))
     case .Keyword(let kwd):
         if let keywordConstant = KeywordConstant(rawValue: (kwd as NSString).uppercaseString) {
             return (.KeywordConstant(keywordConstant), stream.advance(1))

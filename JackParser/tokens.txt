@@ -52,6 +52,8 @@ symbol +
 keyword null
 symbol +
 keyword this
+symbol +
+string blah blah blah
 symbol ;
 
 symbol }
