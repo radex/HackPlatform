@@ -1,4 +1,4 @@
-//import Foundation
+import Foundation
 
 func parseStatements(stream: TokenStream) -> ([Statement], TokenStream) {
     var statements: [Statement] = []
@@ -120,6 +120,12 @@ func parseTerm(stream: TokenStream) -> (Term, TokenStream)? {
     switch stream[0] {
     case .Number(let number):
         return (.IntegerConstant(number), stream.advance(1))
+    case .Keyword(let kwd):
+        if let keywordConstant = KeywordConstant(rawValue: (kwd as NSString).uppercaseString) {
+            return (.KeywordConstant(keywordConstant), stream.advance(1))
+        } else {
+            fatalError("")
+        }
     case .Identifier(let id):
         return (.VariableName(id), stream.advance(1))
     default:
@@ -134,13 +140,11 @@ func parseOp(stream: TokenStream) -> (Operator, TokenStream)? {
     
     switch stream[0] {
     case .Symbol(let symbol):
-        switch symbol {
-        case "<": return (.Lt, stream.advance(1))
-        case "+": return (.Plus, stream.advance(1))
-        default:
-            return nil
+        if let op = Operator(rawValue: symbol) {
+            return (op, stream.advance(1))
         }
-    default:
-        return nil
+    default: ()
     }
+    
+    return nil
 }

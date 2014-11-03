@@ -1,11 +1,26 @@
+enum KeywordConstant: String {
+    case True = "TRUE"
+    case False = "FALSE"
+    case Null = "NULL"
+    case This = "THIS"
+}
+
 enum Term {
-    case VariableName(String)
     case IntegerConstant(Int)
+    case KeywordConstant(JackParser.KeywordConstant)
+    case VariableName(String)
 }
 
 enum Operator: String {
-    case Lt = "<"
     case Plus = "+"
+    case Minus = "-"
+    case Mul = "*"
+    case Div = "/"
+    case And = "&"
+    case Or = "|"
+    case Lt = "<"
+    case Gt = ">"
+    case Eq = "="
 }
 
 struct Expression {
@@ -24,8 +39,9 @@ enum Statement {
 extension Term: Printable {
     var description: String {
         switch self {
-        case .VariableName(let id): return "Variable '\(id)'"
         case .IntegerConstant(let num): return "\(num)"
+        case .KeywordConstant(let kwd): return kwd.rawValue
+        case .VariableName(let id): return "Variable '\(id)'"
         }
     }
 }

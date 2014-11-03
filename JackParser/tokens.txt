@@ -21,8 +21,10 @@ symbol }
 keyword if
 symbol (
 identifier foo
-symbol <
+symbol =
 number 10
+symbol *
+number 100
 symbol )
 
 symbol {
@@ -42,6 +44,14 @@ keyword let
 identifier f
 symbol =
 number 1
+symbol +
+keyword true
+symbol +
+keyword false
+symbol +
+keyword null
+symbol +
+keyword this
 symbol ;
 
 symbol }
