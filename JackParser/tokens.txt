@@ -1,0 +1,15 @@
+keyword while
+symbol (
+identifier count
+symbol <
+number 100
+symbol )
+symbol {
+keyword let
+identifier count
+symbol =
+identifier count
+symbol +
+number 1
+symbol ;
+symbol }
