@@ -81,7 +81,7 @@ func parseSubroutineCall(stream: TokenStream) -> (SubroutineCall, TokenStream)? 
     }
     
     // do we have a dot?
-    if stream[0] == .Symbol(".") {
+    if stream.isSymbol(".") {
         if let str = stream[1].getIdent() {
             secondIdent = str
             stream = stream.advance(2)
@@ -91,18 +91,18 @@ func parseSubroutineCall(stream: TokenStream) -> (SubroutineCall, TokenStream)? 
     }
     
     // opening paren
-    if stream[0] != .Symbol("(") {
+    if !stream.isSymbol("(") {
         return nil
     }
     
     stream = stream.advance(1)
     
     // do we have arguments?
-    if stream[0] != .Symbol(")") {
+    if !stream.isSymbol(")") {
         let (args, newStream) = parseSubroutineCallArguments(stream)
         arguments = args
         stream = newStream
-        assert(stream[0] == .Symbol(")"))
+        assert(stream.isSymbol(")"))
     }
     
     // return
@@ -123,9 +123,9 @@ func parseSubroutineCallArguments(stream: TokenStream) -> ([Expression], TokenSt
         arguments.append(expr)
         stream = newStream
         
-        if stream[0] == .Symbol(")") {
+        if stream.isSymbol(")") {
             break
-        } else if stream[0] == .Symbol(",") {
+        } else if stream.isSymbol(",") {
             stream = stream.advance(1)
             continue
         } else {
@@ -149,9 +149,9 @@ func parseVariableTerm(stream: TokenStream) -> (Term, TokenStream)? {
 }
 
 func parseBoxedExpression(stream: TokenStream) -> (Term, TokenStream)? {
-    if stream[0] == .Symbol("(") {
+    if stream.isSymbol("(") {
         let (expr, newStream) = parseExpression(stream.advance(1))!
-        assert(newStream[0] == .Symbol(")"))
+        assert(newStream.isSymbol(")"))
         return (.BoxedExpression(Box(expr)), newStream.advance(1))
     }
     
@@ -190,10 +190,10 @@ func parseVariableNameSubscript(stream: TokenStream) -> (String, Expression?, To
     // extract subscript
     var sub: Expression?
     
-    if stream[0] == .Symbol("[") {
+    if stream.isSymbol("[") {
         let (expr, newStream) = parseExpression(stream.advance(1))!
         sub = expr
-        assert(newStream[0] == .Symbol("]"))
+        assert(newStream.isSymbol("]"))
         stream = newStream.advance(1)
     }
     

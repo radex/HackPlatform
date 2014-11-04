@@ -1,6 +1,6 @@
 func parseClass(stream: TokenStream) -> (ClassDeclaration, TokenStream)? {
     var stream = stream
-    if stream.isEmpty || stream[0] != .Keyword("class") {
+    if !stream.isKeyword("class") {
         return nil
     }
     
@@ -16,7 +16,7 @@ func parseClass(stream: TokenStream) -> (ClassDeclaration, TokenStream)? {
 func parseClassBody(stream: TokenStream) -> ([ClassVariableDeclaration], [SubroutineDeclaration], TokenStream) {
     var stream = stream
     
-    assert(stream[0] == .Symbol("{"))
+    assert(stream.isSymbol("{"))
     
     let (varDecls, newStream) = parseClassVariableDeclarations(stream.advance(1))
     stream = newStream
@@ -24,7 +24,7 @@ func parseClassBody(stream: TokenStream) -> ([ClassVariableDeclaration], [Subrou
     let (subroutines, newStream2) = parseSubroutineDeclarations(stream)
     stream = newStream2
     
-    assert(stream[0] == .Symbol("}"))
+    assert(stream.isSymbol("}"))
     
     return (varDecls, subroutines, stream.advance(1))
 }
@@ -58,7 +58,7 @@ func parseClassVariableDeclaration(stream: TokenStream) -> (ClassVariableDeclara
     // type and names
     let (type, names, newStream) = parseVariableTypeAndNames(stream.advance(1))
     stream = newStream
-    assert(stream[0] == .Symbol(";"))
+    assert(stream.isSymbol(";"))
     
     let declaration = ClassVariableDeclaration(scope: scope, type: type, names: names)
     return (declaration, stream.advance(1))
@@ -119,20 +119,20 @@ func parseSubroutineParameters(stream: TokenStream) -> ([(Type, String)], TokenS
     var stream = stream
     var parameters: [(Type, String)] = []
     
-    assert(stream[0] == .Symbol("("))
+    assert(stream.isSymbol("("))
     stream = stream.advance(1)
     
-    if stream[0] != .Symbol(")") {
+    if !stream.isSymbol(")") {
         while true {
             let type = parseType(stream[0])
             let name = stream[1].getIdent()!
             parameters.append((type, name))
             stream = stream.advance(2)
             
-            if stream[0] == .Symbol(",") {
+            if stream.isSymbol(",") {
                 stream = stream.advance(1)
                 continue
-            } else if stream[0] == .Symbol(")") {
+            } else if stream.isSymbol(")") {
                 break
             } else {
                 fatalError("Expected comma or closing paren")
@@ -149,7 +149,7 @@ func parseSubroutineParameters(stream: TokenStream) -> ([(Type, String)], TokenS
 func parseSubroutineBody(stream: TokenStream) -> ([VariableDeclaration], [Statement], TokenStream) {
     var stream = stream
     
-    assert(stream[0] == .Symbol("{"))
+    assert(stream.isSymbol("{"))
     
     let (varDecls, newStream) = parseVariableDeclarations(stream.advance(1))
     stream = newStream
@@ -157,7 +157,7 @@ func parseSubroutineBody(stream: TokenStream) -> ([VariableDeclaration], [Statem
     let (statements, newStream2) = parseStatements(stream)
     stream = newStream2
     
-    assert(stream[0] == .Symbol("}"))
+    assert(stream.isSymbol("}"))
     
     return (varDecls, statements, stream.advance(1))
 }
@@ -176,13 +176,13 @@ func parseVariableDeclarations(stream: TokenStream) -> ([VariableDeclaration], T
 
 func parseVariableDeclaration(stream: TokenStream) -> (VariableDeclaration, TokenStream)? {
     var stream = stream
-    if stream.isEmpty || stream[0] != .Keyword("var") {
+    if !stream.isKeyword("var") {
         return nil
     }
     
     let (type, names, newStream) = parseVariableTypeAndNames(stream.advance(1))
     stream = newStream
-    assert(stream[0] == .Symbol(";"))
+    assert(stream.isSymbol(";"))
     
     let declaration = VariableDeclaration(type: type, names: names)
     return (declaration, stream.advance(1))
@@ -206,10 +206,10 @@ func parseVariableTypeAndNames(stream: TokenStream) -> (Type, [String], TokenStr
             fatalError("Expected a valid variable name")
         }
         
-        if stream[0] == .Symbol(",") {
+        if stream.isSymbol(",") {
             stream = stream.advance(1)
             continue
-        } else if stream[0] == .Symbol(";") {
+        } else if stream.isSymbol(";") {
             break
         } else {
             fatalError("Expected another variable name or semicolon")

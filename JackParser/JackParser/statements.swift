@@ -17,34 +17,34 @@ func parseStatement(stream: TokenStream) -> (Statement, TokenStream)? {
 }
 
 func parseWhileStatement(stream: TokenStream) -> (Statement, TokenStream)? {
-    if stream.isEmpty || stream[0] != .Keyword("while") {
+    if !stream.isKeyword("while") {
         return nil
     }
     
     assert(stream[1] == .Symbol("("))
     let (expr, stream) = parseExpression(stream.advance(2))!
-    assert(stream[0] == .Symbol(")"))
+    assert(stream.isSymbol(")"))
     
     assert(stream[1] == .Symbol("{"))
     let (statements, stream2) = parseStatements(stream.advance(2))
-    assert(stream2[0] == .Symbol("}"))
+    assert(stream2.isSymbol("}"))
     
     let whileStatement = Statement.While(condition: expr, statements: statements)
     return (whileStatement, stream2.advance(1))
 }
 
 func parseIfStatement(stream: TokenStream) -> (Statement, TokenStream)? {
-    if stream.isEmpty || stream[0] != .Keyword("if") {
+    if !stream.isKeyword("if") {
         return nil
     }
     
     assert(stream[1] == .Symbol("("))
     let (expr, stream) = parseExpression(stream.advance(2))!
-    assert(stream[0] == .Symbol(")"))
+    assert(stream.isSymbol(")"))
     
     assert(stream[1] == .Symbol("{"))
     let (statements, stream2) = parseStatements(stream.advance(2))
-    assert(stream2[0] == .Symbol("}"))
+    assert(stream2.isSymbol("}"))
     
     let (elseStatements, stream3) = parseElseStatements(stream2.advance(1))
     
@@ -53,13 +53,13 @@ func parseIfStatement(stream: TokenStream) -> (Statement, TokenStream)? {
 }
 
 func parseElseStatements(stream: TokenStream) -> ([Statement]?, TokenStream) {
-    if stream.isEmpty || stream[0] != .Keyword("else") {
+    if !stream.isKeyword("else") {
         return (nil, stream)
     }
     
     assert(stream[1] == .Symbol("{"))
     let (statements, stream) = parseStatements(stream.advance(2))
-    assert(stream[0] == .Symbol("}"))
+    assert(stream.isSymbol("}"))
     
     return (statements, stream.advance(1))
 }
@@ -68,7 +68,7 @@ func parseElseStatements(stream: TokenStream) -> ([Statement]?, TokenStream) {
 func parseLetStatement(stream: TokenStream) -> (Statement, TokenStream)? {
     var stream = stream
     
-    if stream.isEmpty || stream[0] != .Keyword("let") {
+    if !stream.isKeyword("let") {
         return nil
     }
     
@@ -77,17 +77,17 @@ func parseLetStatement(stream: TokenStream) -> (Statement, TokenStream)? {
     stream = newStream
     
     // extract value
-    assert(stream[0] == .Symbol("="))
+    assert(stream.isSymbol("="))
     let (expr, newStream2) = parseExpression(stream.advance(1))!
     stream = newStream2
-    assert(stream[0] == .Symbol(";"))
+    assert(stream.isSymbol(";"))
     
     let statement = Statement.Let(variable: variableName, subskript: sub, expression: expr)
     return (statement, stream.advance(1))
 }
 
 func parseReturnStatement(stream: TokenStream) -> (Statement, TokenStream)? {
-    if stream.isEmpty || stream[0] != .Keyword("return") {
+    if !stream.isKeyword("return") {
         return nil
     }
     
@@ -99,17 +99,17 @@ func parseReturnStatement(stream: TokenStream) -> (Statement, TokenStream)? {
         workingStream = stream
     }
     
-    assert(workingStream[0] == .Symbol(";"))
+    assert(workingStream.isSymbol(";"))
     
     return (.Return(expression), workingStream.advance(1))
 }
 
 func parseDoStatement(stream: TokenStream) -> (Statement, TokenStream)? {
-    if stream.isEmpty || stream[0] != .Keyword("do") {
+    if !stream.isKeyword("do") {
         return nil
     }
     
     let (call, newStream) = parseSubroutineCall(stream.advance(1))!
-    assert(newStream[0] == .Symbol(";"))
+    assert(newStream.isSymbol(";"))
     return (.Do(call), newStream.advance(1))
 }

@@ -32,4 +32,14 @@ struct TokenStream: Printable {
             return Array(tokens[offset..<(offset+n)])
         }
     }
+    
+    // checkers
+    
+    func isKeyword(keyword: String) -> Bool {
+        return !isEmpty && self[0] == .Keyword(keyword)
+    }
+    
+    func isSymbol(sym: String) -> Bool {
+        return !isEmpty && self[0] == .Symbol(sym)
+    }
 }
