@@ -13,6 +13,27 @@ func stringifyList<T>(array: [T]) -> [String] {
     return array.map { "\($0)" }
 }
 
+extension ClassDeclaration: Printable {
+    var description: String {
+        var str = "class \(name) {\n"
+        let decls = stringifyList(variables) + [""] + stringifyList(subroutines)
+        str += indent(formatList(decls))
+        str += "\n}\n"
+        return str
+    }
+}
+
+extension ClassVariableDeclaration: Printable {
+    var description: String {
+        let names = join(", ", self.names)
+        return "\(scope) \(type) \(names);"
+    }
+}
+
+extension ClassVariableDeclaration.Scope: Printable {
+    var description: String { return self.rawValue }
+}
+
 extension SubroutineDeclaration: Printable {
     var description: String {
         var returnType = (self.returnType == nil) ? "void" : "\(self.returnType!)"

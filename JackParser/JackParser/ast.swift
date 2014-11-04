@@ -1,21 +1,22 @@
 import Foundation
 
-//struct Class {
-//    let name: String
-//    let variables: [ClassVariableDeclaration]
-//    let subroutines: [SubroutineDeclaration]
-//}
-//
-//struct ClassVariableDeclaration {
-//    enum Scope {
-//        case Static, Field
-//    }
-//    
-//    let scope: Scope
-//    let type: Type
-//    let names: [String]
-//}
-//
+struct ClassDeclaration {
+    let name: String
+    let variables: [ClassVariableDeclaration]
+    let subroutines: [SubroutineDeclaration]
+}
+
+struct ClassVariableDeclaration {
+    enum Scope: String {
+        case Static = "static"
+        case Field  = "field"
+    }
+    
+    let scope: Scope
+    let type: Type
+    let names: [String]
+}
+
 struct SubroutineDeclaration {
     enum Scope: String {
         case Constructor = "constructor"
