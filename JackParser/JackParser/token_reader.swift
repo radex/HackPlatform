@@ -1,11 +1,11 @@
 import Foundation
 
 enum Token {
+    case Identifier(Swift.String)
     case Keyword(Swift.String)
     case Symbol(Swift.String)
     case Number(Int)
     case String(Swift.String)
-    case Identifier(Swift.String)
 }
 
 extension Token: Printable {

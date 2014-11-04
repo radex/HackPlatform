@@ -11,3 +11,19 @@ extension Box: Printable {
         return "\(value)"
     }
 }
+
+infix operator |> { associativity left precedence 150 }
+
+func |><A, B>(a: A?, f: A -> B?) -> B? {
+    if let a = a {
+        return f(a)
+    } else {
+        return .None
+    }
+}
+
+func |><A>(a: A?, f: A -> ()) {
+    if let a = a {
+        f(a)
+    }
+}

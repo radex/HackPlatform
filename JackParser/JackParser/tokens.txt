@@ -1,3 +1,18 @@
+keyword method
+identifier String
+identifier blah
+symbol (
+keyword boolean
+identifier foo
+symbol ,
+keyword int
+identifier bar
+symbol ,
+identifier String
+identifier fla
+symbol )
+symbol {
+
 keyword var
 identifier String
 identifier varName
@@ -152,5 +167,7 @@ symbol ,
 string foo bar
 symbol )
 symbol ;
+
+symbol }
 
 symbol }

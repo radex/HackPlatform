@@ -16,19 +16,21 @@ import Foundation
 //    let names: [String]
 //}
 //
-//struct SubroutineDeclaration {
-//    enum Scope {
-//        case Constructor, Function, Method
-//    }
-//    
-//    let scope: Scope
-//    let returnType: Type?
-//    let name: String
-//    let parameters: [(Type, String)]
-//    let variableDeclarations: [VariableDeclaration]
-//    let statements: [Statement]
-//}
-//
+struct SubroutineDeclaration {
+    enum Scope: String {
+        case Constructor = "constructor"
+        case Function    = "function"
+        case Method      = "method"
+    }
+    
+    let scope: Scope
+    let returnType: Type?
+    let name: String
+    let parameters: [(Type, String)]
+    let variableDeclarations: [VariableDeclaration]
+    let statements: [Statement]
+}
+
 struct VariableDeclaration {
     let type: Type
     let names: [String]

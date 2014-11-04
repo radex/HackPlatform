@@ -9,6 +9,24 @@ func formatList<T>(array: [T]) -> String {
     return join("\n", array.map { "\($0)" })
 }
 
+extension SubroutineDeclaration: Printable {
+    var description: String {
+        var returnType = (self.returnType == nil) ? "void" : "\(self.returnType!)"
+        var params = join(", ", parameters.map { (type, name) in "\(type) \(name)" })
+        var str = "\(scope.rawValue) \(returnType) \(name)(\(params))"
+        str += " {\n"
+        str += indent(formatList(variableDeclarations))
+        str += "\n\n"
+        str += indent(formatList(statements))
+        str += "\n}"
+        return str
+    }
+}
+
+extension SubroutineDeclaration.Scope: Printable {
+    var description: String { return self.rawValue }
+}
+
 extension VariableDeclaration: Printable {
     var description: String {
         let names = join(", ", self.names)
