@@ -149,25 +149,21 @@ func parseVariableTerm(stream: TokenStream) -> (Term, TokenStream)? {
 }
 
 func parseBoxedExpression(stream: TokenStream) -> (Term, TokenStream)? {
-    if let sym = stream[0].getSymbol() {
-        if sym == "(" {
-            let (expr, newStream) = parseExpression(stream.advance(1))!
-            assert(newStream[0] == .Symbol(")"))
-            return (.BoxedExpression(Box(expr)), newStream.advance(1))
-        }
+    if stream[0] == .Symbol("(") {
+        let (expr, newStream) = parseExpression(stream.advance(1))!
+        assert(newStream[0] == .Symbol(")"))
+        return (.BoxedExpression(Box(expr)), newStream.advance(1))
     }
     
     return nil
 }
 
 func parseUnaryOperatorTerm(stream: TokenStream) -> (Term, TokenStream)? {
-    if let sym = stream[0].getSymbol() {
-        if let op = UnaryOperator(rawValue: sym) {
-            if let (term, newStream) = parseTerm(stream.advance(1)) {
-                return (.UnaryOpTerm(op, Box(term)), newStream)
-            } else {
-                fatalError("No valid expression term following an unary operator")
-            }
+    if let op = stream[0].getSymbol() |> { UnaryOperator(rawValue: $0) } {
+        if let (term, newStream) = parseTerm(stream.advance(1)) {
+            return (.UnaryOpTerm(op, Box(term)), newStream)
+        } else {
+            fatalError("No valid expression term following an unary operator")
         }
     }
     
@@ -183,9 +179,10 @@ func parseVariableNameSubscript(stream: TokenStream) -> (String, Expression?, To
     // extract variable name
     var variableName: String
     
-    switch stream[0] {
-    case .Identifier(let varName): variableName = varName
-    default: return nil
+    if let varName = stream[0].getIdent() {
+        variableName = varName
+    } else {
+        return nil
     }
     
     stream = stream.advance(1)
@@ -207,13 +204,8 @@ func parseOp(stream: TokenStream) -> (Operator, TokenStream)? {
     if stream.isEmpty {
         return nil
     }
-    
-    switch stream[0] {
-    case .Symbol(let symbol):
-        if let op = Operator(rawValue: symbol) {
-            return (op, stream.advance(1))
-        }
-    default: ()
+    if let op = stream[0].getSymbol() |> { Operator(rawValue: $0) } {
+        return (op, stream.advance(1))
     }
     
     return nil
