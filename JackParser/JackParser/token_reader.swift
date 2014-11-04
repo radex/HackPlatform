@@ -73,7 +73,7 @@ extension Token {
 }
 
 func readTokens(tokens: NSString) -> [Token] {
-    return tokens.componentsSeparatedByString("\n").filter { $0.length > 0 }.map { readToken($0 as String) }
+    return tokens.componentsSeparatedByString("\n").filter { $0.length > 0 }.map { readToken(lstrip($0 as NSString)) }
 }
 
 private func readToken(token: String) -> Token {
@@ -94,5 +94,13 @@ func extractToken(token: NSString, prefix: String, builder: String -> Token) -> 
         return builder(value)
     } else {
         return nil
+    }
+}
+
+func lstrip(string: NSString) -> NSString {
+    if string.hasPrefix(" ") || string.hasPrefix("\t") {
+        return lstrip(string.substringFromIndex(1))
+    } else {
+        return string
     }
 }

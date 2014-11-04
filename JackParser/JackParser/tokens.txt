@@ -1,173 +1,172 @@
+keyword constructor
+identifier Foo
+identifier new
+symbol (
+symbol )
+symbol {
+symbol }
+
 keyword method
 identifier String
 identifier blah
 symbol (
-keyword boolean
-identifier foo
-symbol ,
-keyword int
-identifier bar
-symbol ,
-identifier String
-identifier fla
+    keyword boolean
+    identifier foo
+    symbol ,
+    keyword int
+    identifier bar
+    symbol ,
+    identifier String
+    identifier fla
 symbol )
 symbol {
 
-keyword var
-identifier String
-identifier varName
-symbol ,
-identifier var2
-symbol ,
-identifier var3
-symbol ;
+    keyword var
+    identifier String
+    identifier varName
+    symbol ,
+    identifier var2
+    symbol ,
+    identifier var3
+    symbol ;
 
-keyword var
-keyword int
-identifier varName
-symbol ;
+    keyword var
+    keyword int
+    identifier varName
+    symbol ;
 
-keyword while
+    keyword while
 
-symbol (
-identifier count
-symbol <
-number 100
-symbol )
-symbol {
-
-keyword let
-identifier count
-symbol =
-identifier count
-symbol +
-number 1
-symbol ;
-
-symbol }
+    symbol (
+        identifier count
+        symbol <
+        number 100
+    symbol )
+    symbol {
+        keyword let
+        identifier count
+        symbol =
+        identifier count
+        symbol +
+        number 1
+        symbol ;
+    symbol }
 
 
-keyword if
-symbol (
-identifier foo
-symbol =
-number 10
-symbol *
-number 100
-symbol )
+    keyword if
+    symbol (
+        identifier foo
+        symbol =
+        number 10
+        symbol *
+        number 100
+    symbol )
+    symbol {
+        keyword let
+        identifier f
+        symbol =
+        number 1
+        symbol ;
+    symbol }
+    keyword else
+    symbol {
+        keyword let
+        identifier f
+        symbol =
+        number 1
+        symbol +
+        keyword true
+        symbol +
+        keyword false
+        symbol +
+        keyword null
+        symbol +
+        keyword this
+        symbol +
+        string blah blah blah
+        symbol +
+        symbol ~
+        symbol -
+        string 10
+        symbol ;
 
-symbol {
+        keyword return
+        symbol ;
 
-keyword let
-identifier f
-symbol =
-number 1
-symbol ;
+        keyword return
+        number 10
+        symbol +
+        symbol (
+        symbol -
+        number 5
+        symbol +
+        symbol (
+        number 3
+        symbol *
+        number 10
+        symbol )
+        symbol )
+        symbol ;
 
-symbol }
+        keyword let
+        identifier foo
+        symbol [
+        number 10
+        symbol ]
+        symbol =
+        identifier foo
+        symbol [
+        number 10
+        symbol ]
+        symbol ;
 
-keyword else
-symbol {
+        keyword let
+        identifier foo
+        symbol =
+        identifier method
+        symbol (
+        symbol )
+        symbol +
+        identifier class
+        symbol .
+        identifier method
+        symbol (
+        symbol )
+        symbol ;
 
-keyword let
-identifier f
-symbol =
-number 1
-symbol +
-keyword true
-symbol +
-keyword false
-symbol +
-keyword null
-symbol +
-keyword this
-symbol +
-string blah blah blah
-symbol +
-symbol ~
-symbol -
-string 10
-symbol ;
+        keyword let
+        identifier foo
+        symbol =
+        identifier method
+        symbol (
+        number 5
+        symbol )
+        symbol +
+        identifier var
+        symbol .
+        identifier method
+        symbol (
+        number 5
+        symbol ,
+        string foo bar
+        symbol ,
+        symbol (
+        number 3
+        symbol +
+        number 2
+        symbol )
+        symbol )
+        symbol ;
 
-keyword return
-symbol ;
-
-keyword return
-number 10
-symbol +
-symbol (
-symbol -
-number 5
-symbol +
-symbol (
-number 3
-symbol *
-number 10
-symbol )
-symbol )
-symbol ;
-
-keyword let
-identifier foo
-symbol [
-number 10
-symbol ]
-symbol =
-identifier foo
-symbol [
-number 10
-symbol ]
-symbol ;
-
-keyword let
-identifier foo
-symbol =
-identifier method
-symbol (
-symbol )
-symbol +
-identifier class
-symbol .
-identifier method
-symbol (
-symbol )
-symbol ;
-
-keyword let
-identifier foo
-symbol =
-identifier method
-symbol (
-number 5
-symbol )
-symbol +
-identifier var
-symbol .
-identifier method
-symbol (
-number 5
-symbol ,
-string foo bar
-symbol ,
-symbol (
-number 3
-symbol +
-number 2
-symbol )
-symbol )
-symbol ;
-
-keyword do
-identifier var
-symbol .
-identifier method
-symbol (
-number 5
-symbol ,
-string foo bar
-symbol )
-symbol ;
-
-symbol }
-
+        keyword do
+        identifier var
+        symbol .
+        identifier method
+        symbol (
+        number 5
+        symbol ,
+        string foo bar
+        symbol )
+        symbol ;
+    symbol }
 symbol }
