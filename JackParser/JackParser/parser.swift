@@ -1,3 +1,15 @@
+func parseSubroutineDeclarations(stream: TokenStream) -> ([SubroutineDeclaration], TokenStream) {
+    var declarations: [SubroutineDeclaration] = []
+    var stream = stream
+    
+    while let (decl, newStream) = parseSubroutineDeclaration(stream) {
+        declarations.append(decl)
+        stream = newStream
+    }
+    
+    return (declarations, stream)
+}
+
 func parseSubroutineDeclaration(stream: TokenStream) -> (SubroutineDeclaration, TokenStream)? {
     var stream = stream
     if stream.isEmpty {
