@@ -10,7 +10,7 @@ This is the parsing part of the Jack (simple high-level language devised for the
 
 The project isn't complete in that it doesn't include a lexer/tokenizer (it starts from tokens, not original source code) — that's simply because I've already written a lexer before ([here](https://github.com/radex/lodoovka_vm/blob/master/lodoovka_vm/lexer.swift) and [here](https://github.com/jneen/rouge/blob/master/lib/rouge/lexers/swift.rb)), so it wasn't fun/challenging anymore.
 
-JackParser is written in Swift 1.1 and features a strong functional flavor. It operates on immutable, passed-by-value data (structs and enums), and all of the parsing is done via functions performing data transformations (no classes to be found). It's not fully functional in that I do mutate data inside of functions, but there's no global state, so it's pretty close.
+JackParser is written in Swift 1.2 and features a strong functional flavor. It operates on immutable, passed-by-value data (structs and enums), and all of the parsing is done via functions performing data transformations (no classes to be found). It's not fully functional in that I do mutate data inside of functions, but there's no global state, so it's pretty close.
 
 All functions in the parser follow a similar pattern — they take a stream of tokens (basically an array of tokens yet to be parsed), attempt to find and parse whatever it is that they want to find (e.g. a function declaration) and either return a tuple of an AST fragment (e.g. a SubroutineDeclaration struct) and a transformed token stream (all of the tokens following the parsed fragment); or nil if the parsing function hasn't found what it was looking for.
 

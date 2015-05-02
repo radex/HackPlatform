@@ -72,8 +72,10 @@ extension Token {
     }
 }
 
-func readTokens(tokens: NSString) -> [Token] {
-    return tokens.componentsSeparatedByString("\n").filter { $0.length > 0 }.map { readToken(lstrip($0 as NSString)) }
+func readTokens(tokens: String) -> [Token] {
+    return tokens.componentsSeparatedByString("\n")
+        .filter { !$0.isEmpty }
+        .map { readToken(lstrip($0) as String) }
 }
 
 private func readToken(token: String) -> Token {
@@ -90,7 +92,7 @@ func extractToken(token: NSString, prefix: String, builder: String -> Token) -> 
     let prefix = "\(prefix) "
     
     if token.hasPrefix(prefix) {
-        let value = token.substringFromIndex(prefix.utf16Count)
+        let value = token.substringFromIndex(count(prefix.utf16))
         return builder(value)
     } else {
         return nil

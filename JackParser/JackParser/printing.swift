@@ -1,7 +1,7 @@
 import Foundation
 
 func indent(string: String) -> String {
-    let lines = (string as NSString).componentsSeparatedByString("\n") as [String]
+    let lines = string.componentsSeparatedByString("\n")
     return join("\n", lines.map { "    \($0)" })
 }
 
